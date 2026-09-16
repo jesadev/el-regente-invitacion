@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --color-regente-orange: #f5a623;
+  --color-regente-red: #e8261d;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
