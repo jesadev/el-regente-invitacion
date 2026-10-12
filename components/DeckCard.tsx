@@ -28,6 +28,8 @@ type DeckCardProps = {
   lugar: string;
   /** Precisión del lugar: edificio, piso, salón. */
   lugarDetalle: string;
+  /** Dirección física. Opcional. */
+  direccion?: string;
   /**
    * Frase de cierre opcional. Si no se pasa (o llega vacía), la carta
    * simplemente no la muestra. Queda parametrizada para reutilizar la
@@ -168,6 +170,7 @@ export default function DeckCard({
   hora,
   lugar,
   lugarDetalle,
+  direccion,
   lema,
   onReveal,
 }: DeckCardProps) {
@@ -305,6 +308,13 @@ export default function DeckCard({
               <p className="text-[0.62rem] uppercase tracking-[0.14em] text-regente-ink/70">
                 {lugarDetalle}
               </p>
+              {/* En caja baja: una dirección con número y abreviaturas se lee
+                  peor en versales, y además ocupa menos líneas. */}
+              {direccion && (
+                <p className="pt-0.5 text-[0.62rem] leading-snug text-regente-ink/65">
+                  {direccion}
+                </p>
+              )}
             </motion.div>
 
             <motion.div

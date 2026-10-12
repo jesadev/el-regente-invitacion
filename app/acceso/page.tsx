@@ -59,6 +59,9 @@ export default function AccesoPage() {
           <p className="text-xs uppercase tracking-[0.16em] text-regente-ink/70">
             {evento.lugarDetalle}
           </p>
+          <p className="mx-auto max-w-[32ch] pt-1 text-xs leading-snug text-regente-ink/65">
+            {evento.direccion}
+          </p>
         </div>
 
         <div className="mt-6 flex w-full items-center justify-center gap-3">

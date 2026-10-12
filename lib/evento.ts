@@ -20,6 +20,7 @@ export const evento = {
   hora: "6:00 p. m.",
   lugar: "Centro Media",
   lugarDetalle: "Oficinas de Diario Libre",
+  direccion: "Av. Buenaventura Freites #18, Jardines del Norte, DN.",
   /** Cierre de la invitación, donde antes iba el lema de marca. */
   cierre: "Será un honor contar con su presencia.",
 } as const;

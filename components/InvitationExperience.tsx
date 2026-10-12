@@ -53,6 +53,7 @@ export default function InvitationExperience({
         hora={evento.hora}
         lugar={evento.lugar}
         lugarDetalle={evento.lugarDetalle}
+        direccion={evento.direccion}
         lema={evento.cierre}
         onReveal={setRevelada}
       />
