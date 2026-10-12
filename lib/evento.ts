@@ -5,9 +5,8 @@
  * y son la única fuente de verdad: la carta, la portada pública, la página de
  * acceso y los metadatos leen de aquí.
  *
- * OJO con la fecha: el cliente escribió "Miércoles 27 de octubre", pero el 27
- * de octubre de 2026 cae martes (el miércoles sería el 28). Queda tal cual lo
- * envió el cliente, a la espera de que confirme si cambia el día o la fecha.
+ * La fecha está verificada contra el calendario: el 27 de octubre de 2026 cae
+ * martes. El cliente la envió con otro día de la semana y lo confirmó corregido.
  */
 export const evento = {
   organizacion: "El Regente Media Group",
@@ -17,7 +16,7 @@ export const evento = {
   subtitulo: "de nuestra plataforma de medios",
   descripcion:
     "Una nueva propuesta de comunicación, información e investigación que nace para contar la actualidad con perspectiva, criterio y verdad.",
-  fecha: "Miércoles 27 de octubre, 2026",
+  fecha: "Martes 27 de octubre, 2026",
   hora: "6:00 p. m.",
   lugar: "Centro Media",
   lugarDetalle: "Oficinas de Diario Libre",

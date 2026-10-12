@@ -48,7 +48,11 @@ export default async function InvitacionPage(
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-6 py-12 sm:py-16">
-      <InvitationExperience nombre={invitado.nombre} evento={evento} />
+      <InvitationExperience
+        nombre={invitado.nombre}
+        slug={invitado.slug}
+        evento={evento}
+      />
     </main>
   );
 }

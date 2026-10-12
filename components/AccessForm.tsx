@@ -15,26 +15,63 @@ const CAMPO_EDITABLE = `${CAMPO} border-white/15 bg-transparent text-regente-pap
 const ETIQUETA =
   "block text-[0.65rem] uppercase tracking-[0.25em] text-regente-orange";
 
+/** Si ni siquiera llegamos a hablar con el servidor (red caída, por ejemplo). */
+const ERROR_GENERICO =
+  "No pudimos registrar tu confirmación. Revisa tu conexión e intenta de nuevo.";
+
 /**
  * Registro para quien llega por el QR de la invitación impresa.
  *
  * A diferencia de `ConfirmForm`, aquí no sabemos quién es: el nombre se
  * escribe, no viene dado. Por eso ambos campos son editables y requeridos.
  */
+type Estado = "listo" | "enviando" | "confirmado";
+
 export default function AccessForm() {
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [confirmado, setConfirmado] = useState(false);
+  const [estado, setEstado] = useState<Estado>("listo");
+  const [error, setError] = useState<string | null>(null);
 
   // Sin validación de formato todavía: eso llega con WhatsApp Cloud API.
   const incompleto = nombre.trim() === "" || telefono.trim() === "";
+  const enviando = estado === "enviando";
+  const confirmado = estado === "confirmado";
 
-  // Demo visual: por ahora no sale nada hacia afuera. El envío real
-  // (Google Sheets / n8n) entra aquí en la siguiente fase.
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  /**
+   * Solo pasamos a "confirmado" si el servidor dijo que sí. Cualquier otro
+   * caso vuelve al formulario con el error a la vista, para reintentar.
+   */
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (incompleto) return;
-    setConfirmado(true);
+    if (incompleto || enviando) return;
+
+    setEstado("enviando");
+    setError(null);
+
+    try {
+      const respuesta = await fetch("/api/confirmar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre.trim(),
+          telefono: telefono.trim(),
+        }),
+      });
+
+      const datos = (await respuesta.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!respuesta.ok) {
+        throw new Error(datos?.error ?? ERROR_GENERICO);
+      }
+
+      setEstado("confirmado");
+    } catch (problema) {
+      setEstado("listo");
+      setError(problema instanceof Error ? problema.message : ERROR_GENERICO);
+    }
   }
 
   return (
@@ -111,20 +148,29 @@ export default function AccessForm() {
               />
             </div>
 
+            {error && (
+              <p
+                role="alert"
+                className="rounded-lg border border-regente-red/50 bg-regente-red/10 px-4 py-3 text-sm leading-snug tracking-wide text-regente-paper"
+              >
+                {error}
+              </p>
+            )}
+
             <motion.button
               type="submit"
-              disabled={incompleto}
-              whileTap={{ scale: 0.98 }}
+              disabled={incompleto || enviando}
+              whileTap={enviando ? undefined : { scale: 0.98 }}
               // El mismo degradado de la espada. Se retira al deshabilitarse,
               // porque una imagen de fondo taparía el gris del estado inactivo.
               style={
-                incompleto
+                incompleto || enviando
                   ? undefined
                   : { backgroundImage: brandGradients.ribbon }
               }
               className="w-full rounded-lg px-6 py-3.5 font-display text-base uppercase tracking-[0.15em] text-regente-ink transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-regente-orange disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35 disabled:hover:brightness-100"
             >
-              Confirmar asistencia
+              {enviando ? "Enviando…" : "Confirmar asistencia"}
             </motion.button>
           </motion.form>
         )}

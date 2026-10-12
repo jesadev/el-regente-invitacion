@@ -11,6 +11,8 @@ const EASE = [...brandMotion.ease] as [number, number, number, number];
 
 type InvitationExperienceProps = {
   nombre: string;
+  /** Identifica al invitado al confirmar; viaja hasta n8n. */
+  slug: string;
   evento: Evento;
 };
 
@@ -20,6 +22,7 @@ type InvitationExperienceProps = {
  */
 export default function InvitationExperience({
   nombre,
+  slug,
   evento,
 }: InvitationExperienceProps) {
   const [revelada, setRevelada] = useState(false);
@@ -71,7 +74,7 @@ export default function InvitationExperience({
             }}
             className="flex w-full justify-center"
           >
-            <ConfirmForm nombre={nombre} />
+            <ConfirmForm nombre={nombre} slug={slug} />
           </motion.div>
         )}
       </AnimatePresence>
