@@ -35,14 +35,17 @@ export default function AccesoPage() {
           className="pointer-events-none absolute bottom-4 right-4 h-7 w-7 rotate-180"
         />
 
-        <p className="text-sm uppercase tracking-[0.35em] text-regente-red">
-          El Regente
+        <p className="text-[0.7rem] uppercase tracking-[0.25em] text-regente-red">
+          {evento.organizacion}
         </p>
         <div className="mx-auto mt-2 h-px w-14 bg-regente-red/60" />
 
         <h1 className="mt-6 font-display text-2xl uppercase leading-tight tracking-wide text-regente-ink">
           {evento.nombre}
         </h1>
+        <p className="mt-1.5 text-xs uppercase tracking-[0.1em] text-regente-ink/75">
+          {evento.subtitulo}
+        </p>
 
         <div className="mt-5 space-y-0.5 text-regente-ink">
           <p className="text-sm uppercase tracking-[0.16em]">{evento.fecha}</p>
@@ -54,7 +57,7 @@ export default function AccesoPage() {
         <div className="mt-4 space-y-0.5 text-regente-ink">
           <p className="text-sm uppercase tracking-[0.16em]">{evento.lugar}</p>
           <p className="text-xs uppercase tracking-[0.16em] text-regente-ink/70">
-            {evento.ciudad}
+            {evento.lugarDetalle}
           </p>
         </div>
 

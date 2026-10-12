@@ -42,11 +42,15 @@ export default function InvitationExperience({
     <div className="flex w-full flex-col items-center gap-10">
       <DeckCard
         nombre={nombre}
+        organizacion={evento.organizacion}
         evento={evento.nombre}
+        subtitulo={evento.subtitulo}
+        descripcion={evento.descripcion}
         fecha={evento.fecha}
         hora={evento.hora}
         lugar={evento.lugar}
-        ciudad={evento.ciudad}
+        lugarDetalle={evento.lugarDetalle}
+        lema={evento.cierre}
         onReveal={setRevelada}
       />
 

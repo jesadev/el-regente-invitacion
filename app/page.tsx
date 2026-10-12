@@ -37,6 +37,9 @@ export default function Home() {
         <h2 className="font-display text-lg uppercase leading-tight tracking-[0.12em] text-regente-orange">
           {evento.nombre}
         </h2>
+        <p className="-mt-2 text-xs uppercase tracking-[0.18em] text-white/50">
+          {evento.subtitulo}
+        </p>
 
         <p className="text-sm leading-relaxed tracking-wide text-white/60">
           Esta es una invitación personal. Revisa el enlace que recibiste por

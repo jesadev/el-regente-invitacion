@@ -16,11 +16,18 @@ const EASE_IN_OUT = [...brandMotion.easeInOut] as [
 
 type DeckCardProps = {
   nombre: string;
+  /** Quién invita. Encabeza la cara revelada. */
+  organizacion: string;
   evento: string;
+  /** Bajada del título. Opcional. */
+  subtitulo?: string;
+  /** Párrafo de contexto del evento. Opcional. */
+  descripcion?: string;
   fecha: string;
   hora: string;
   lugar: string;
-  ciudad: string;
+  /** Precisión del lugar: edificio, piso, salón. */
+  lugarDetalle: string;
   /**
    * Frase de cierre opcional. Si no se pasa (o llega vacía), la carta
    * simplemente no la muestra. Queda parametrizada para reutilizar la
@@ -119,7 +126,7 @@ const revealLema: Variants = {
 };
 
 const CARA =
-  "absolute inset-0 overflow-hidden rounded-[1.25rem] px-5 py-6 shadow-2xl shadow-black/60";
+  "absolute inset-0 overflow-hidden rounded-[1.25rem] px-4 py-5 shadow-2xl shadow-black/60";
 
 /**
  * El índice de un naipe: la espada arriba a la izquierda y, girada, abajo a la
@@ -153,11 +160,14 @@ const CARTAS_DE_ATRAS = [
 
 export default function DeckCard({
   nombre,
+  organizacion,
   evento,
+  subtitulo,
+  descripcion,
   fecha,
   hora,
   lugar,
-  ciudad,
+  lugarDetalle,
   lema,
   onReveal,
 }: DeckCardProps) {
@@ -175,7 +185,7 @@ export default function DeckCard({
 
   return (
     <div
-      className="relative aspect-[5/7] w-[min(80vw,330px)]"
+      className="relative aspect-[5/7] w-[min(88vw,340px)]"
       style={{ perspective: 1400 }}
     >
       {/* Baraja: dos cartas apiladas detrás, solo para dar profundidad. */}
@@ -215,8 +225,10 @@ export default function DeckCard({
         >
           <div className="relative flex h-full flex-col items-center justify-between text-center">
             <div className="w-full">
-              <p className="text-sm uppercase tracking-[0.35em] text-regente-red">
-                El Regente
+              {/* Tracking contenido: con 0.35em el nombre completo hace wrap
+                  en pantallas de 320px. */}
+              <p className="text-[0.82rem] uppercase tracking-[0.14em] text-regente-red">
+                {organizacion}
               </p>
               <div className="mx-auto mt-2 h-px w-14 bg-regente-red/60" />
               {/* El tracking baja al subir el cuerpo: con 0.28em esta línea
@@ -251,34 +263,47 @@ export default function DeckCard({
         >
           <IndicesDeNaipe tamano="h-7 w-7" />
 
-          <div className="relative flex h-full flex-col items-center justify-center gap-4 text-center text-regente-ink">
-            <motion.p
-              variants={revealItem}
-              custom={0}
-              className="text-sm uppercase tracking-[0.35em]"
-            >
-              El Regente
-            </motion.p>
+          <div className="relative flex h-full flex-col items-center justify-center gap-2.5 text-center text-regente-ink">
+            {/* La organización vive en la cara cerrada: aquí se entra directo
+                al evento. */}
+            <motion.div variants={revealItem} custom={0} className="space-y-1">
+              <h2 className="font-display text-[clamp(1.1rem,6.4vw,1.6rem)] uppercase leading-[1.02] tracking-wide">
+                {evento}
+              </h2>
+              {subtitulo && (
+                <p className="text-[0.7rem] uppercase tracking-[0.1em] text-regente-ink/75">
+                  {subtitulo}
+                </p>
+              )}
+            </motion.div>
 
-            <motion.h2
-              variants={revealItem}
-              custom={1}
-              className="font-display text-[1.75rem] uppercase leading-[1.05] tracking-wide"
-            >
-              {evento}
-            </motion.h2>
+            {descripcion && (
+              // El bloque más largo: en caja baja y con interlineado amplio,
+              // que es lo que lo mantiene legible al tamaño más pequeño.
+              <motion.p
+                variants={revealItem}
+                custom={1}
+                className="max-w-[34ch] text-[0.82rem] leading-[1.5] text-regente-ink/80"
+              >
+                {descripcion}
+              </motion.p>
+            )}
 
             <motion.div variants={revealItem} custom={2} className="space-y-0.5">
-              <p className="text-sm uppercase tracking-[0.16em]">{fecha}</p>
-              <p className="text-sm uppercase tracking-[0.16em] text-regente-ink/75">
+              <p className="text-[0.82rem] font-medium uppercase tracking-[0.12em]">
+                {fecha}
+              </p>
+              <p className="text-[0.82rem] font-medium uppercase tracking-[0.12em] text-regente-ink/80">
                 {hora}
               </p>
             </motion.div>
 
             <motion.div variants={revealItem} custom={3} className="space-y-0.5">
-              <p className="text-sm uppercase tracking-[0.16em]">{lugar}</p>
-              <p className="text-xs uppercase tracking-[0.16em] text-regente-ink/70">
-                {ciudad}
+              <p className="text-[0.82rem] font-medium uppercase tracking-[0.12em]">
+                {lugar}
+              </p>
+              <p className="text-[0.62rem] uppercase tracking-[0.14em] text-regente-ink/70">
+                {lugarDetalle}
               </p>
             </motion.div>
 
@@ -287,15 +312,15 @@ export default function DeckCard({
               custom={4}
               className="flex w-full items-center justify-center gap-3"
             >
-              <span className="h-px w-10 bg-regente-ink/40" />
+              <span className="h-px w-8 bg-regente-ink/40" />
               <Spade variant="ramp" className="h-6 w-6" />
-              <span className="h-px w-10 bg-regente-ink/40" />
+              <span className="h-px w-8 bg-regente-ink/40" />
             </motion.div>
 
             {lema && (
               <motion.p
                 variants={revealLema}
-                className="font-display text-base uppercase tracking-[0.1em]"
+                className="max-w-[24ch] font-display text-[0.78rem] uppercase leading-snug tracking-[0.08em]"
               >
                 {lema}
               </motion.p>
